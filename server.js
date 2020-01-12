@@ -34,18 +34,49 @@ let tasksModel = mongoose.model('gantt_tasks', tasksSchema);
 let linksSchema = new mongoose.Schema();
 let linksModel = mongoose.model('gantt_links', linksSchema);
 
+
 // afficher tout les tasks et links 
-tasksModel.find(null, function (err, tasks) {
-  if (err) { throw err; }
-  // tasks est un tableau de hash
-  console.log('tasks :');
-  console.log(tasks);
-});
-linksModel.find(null, function (err, links) {
-  if (err) { throw err; }
-  // links est un tableau de hash
-  console.log('links :');
-  console.log(links);
+// tasksModel.find(null, function (err, tasks) {
+//   if (err) { throw err; }
+//   // tasks est un tableau de hash
+//   console.log('tasks :');
+//   console.log(tasks);
+// });
+
+// linksModel.find(null, function (err, links) {
+//   if (err) { throw err; }
+//   // links est un tableau de hash
+//   console.log('links :');
+//   console.log(links);
+// });
+
+let Promise = require('bluebird');
+
+ 
+app.get("/data", function (req, res) { 
+  Promise.all([
+    tasksModel.find(null, function (err, tasks) {
+      if (err) { throw err; }
+    }), linksModel.find(null, function (err, tasks) {
+      if (err) { throw err; }
+    })
+  ]).then(function(results){
+    let tasks = results[0];
+    let links = results[1];
+ 
+    // for (var i = 0; i < tasks.length; i++) {
+    //   tasks[i].start_date = tasks[i].start_date.format("YYYY-MM-DD hh:mm:ss");
+    //   tasks[i].open = true;
+    // }
+ 
+    res.send({
+      data: tasks,
+      collections: { links: links }
+    });
+ 
+  }).catch(function(error) {
+    sendResponse(res, "error", null, error);
+  });
 });
 
 
