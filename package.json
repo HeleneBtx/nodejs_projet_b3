@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/HeleneBtx/nodejs_projet_b3#readme",
   "dependencies": {
+    "ent": "^2.2.0",
     "express": "^4.17.1",
     "mongoose": "^5.8.1",
     "socket.io": "^2.3.0"
