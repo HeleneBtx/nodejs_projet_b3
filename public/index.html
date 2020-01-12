@@ -28,6 +28,10 @@
 			gantt.init("gantt_here");
 			
 			gantt.load("/data");
+
+			let dp = new gantt.dataProcessor("/data");
+			dp.init(gantt);
+			dp.setTransactionMode("REST");
 		</script>
 	</body>
 </html>

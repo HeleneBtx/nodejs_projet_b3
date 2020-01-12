@@ -1,15 +1,24 @@
-let app = require('express')();
-let server = require('http').createServer(app);
+// let app = require('express')();
+let express = require('express');
+let server = require('http').createServer(express);
 let io = require('socket.io').listen(server);
 let ent = require('ent');
 const fs = require('fs');
 
-let port = 3000;
+let bodyParser = require('body-parser');
+let path = require('path');
 
-// chargement de la page html 
-app.get('/', function (req, res){
-    res.sendFile(__dirname + '/index.html');
-});
+let port = 3000;
+let app = express();
+
+// chargement de la page html  
+app.use(express.static(path.join(__dirname, "public")));
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
+// app.get('/', function (req, res){
+//     res.sendFile(__dirname + '/index.html');
+// });
 
 // connection bdd
 let mongoose = require('mongoose');
@@ -28,7 +37,16 @@ db.once('open', function() {
 });
 
 // creation schemas et models
-let tasksSchema = new mongoose.Schema();
+
+let tasksSchema = new mongoose.Schema({
+  id : Number,
+  text : String,
+  start_date : String,
+  duration : Number,
+  parent : Number
+});
+
+// let tasksSchema = new mongoose.Schema();
 let tasksModel = mongoose.model('gantt_tasks', tasksSchema);
 
 let linksSchema = new mongoose.Schema();
@@ -79,6 +97,73 @@ app.get("/data", function (req, res) {
   });
 });
 
+// add a new task
+app.post("/data/task", function (req, res) { 
+  let maTache = new tasksModel();
+  let task = getTask(req.body, function(err, task) { 
+    if (err) { throw err; }
+    maTache.text = task.text;
+    maTache.start_date = task.start_date;
+    maTache.duration = task.duration;
+    maTache.progress = task.progress;
+    maTache.parent = task.parent;
+  });  
+  // let task = {"id":"7","start_date":"29-03-2019","text":getTask(req.body).text,"end_date":"02-04-2019","parent":0};  
+ 
+  // db.query("INSERT INTO gantt_tasks(text, start_date, duration, progress, parent)"
+  //   + " VALUES (?,?,?,?,?)", 
+  //   [task.text, task.start_date, task.duration, task.progress, task.parent])
+  
+  // let maTache = new tasksModel();
+  // maTache.text = task.text;
+  // maTache.start_date = task.start_date;
+  // maTache.duration = task.duration;
+  // maTache.progress = task.progress;
+  // maTache.parent = task.parent;
+
+
+  maTache.save(function (err) {
+    if (err) { throw err; }
+    console.log('Commentaire ajouté avec succès !');
+  })
+  .then (function (result) {
+    sendResponse(res, "inserted", result.insertId);
+  })
+  .catch(function(error) {
+    sendResponse(res, "error", null, error); 
+  });
+});
+
+function getTask(data) {
+  return {
+    text: data.text,
+    start_date: data.start_date.date("YYYY-MM-DD"),
+    duration: data.duration,
+    progress: data.progress || 0,
+    parent: data.parent
+  };
+}
+function getLink(data) {
+  return {
+    source: data.source,
+    target: data.target,
+    type: data.type
+  };
+}
+ 
+function sendResponse(res, action, tid, error) {
+ 
+  if (action == "error")
+    console.log(error);
+ 
+  var result = {
+    action: action
+  };
+  if (tid !== undefined && tid !== null)
+    result.tid = tid;
+ 
+  res.send(result);
+}
 
 // connection au serveur central 
 const socket = require('socket.io-client');
@@ -91,6 +176,6 @@ client.on('connect', () => {
   //console.log(client.emit('needHelp'));
 });
 
-server.listen(port, function(){
+app.listen(port, function(){
   console.log("Server is running on port "+port+"...");
 });
