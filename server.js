@@ -59,7 +59,7 @@ app.get("/data", function (req, res) {
     let tasks = results[0];
     let links = results[1];
  
-    // for (var i = 0; i < tasks.length; i++) {
+    // for (let i = 0; i < tasks.length; i++) {
     //   tasks[i].start_date = tasks[i].start_date.format("YYYY-MM-DD hh:mm:ss");
     //   tasks[i].open = true;
     // }
@@ -151,7 +151,7 @@ function sendResponse(res, action, tid, error) {
   if (action == "error")
     console.log(error);
  
-  var result = {
+  let result = {
     action: action
   };
   if (tid !== undefined && tid !== null)
