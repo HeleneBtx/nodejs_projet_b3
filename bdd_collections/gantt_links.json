@@ -1,0 +1,2 @@
+{"_id":{"$oid":"5e1b3ccf016996186c2ae586"},"id":{"$numberInt":"1"},"source":{"$numberInt":"1"},"target":{"$numberInt":"2"},"type":"1"}
+{"_id":{"$oid":"5e1b3d2e016996186c2ae587"},"id":{"$numberInt":"2"},"source":{"$numberInt":"2"},"target":{"$numberInt":"3"},"type":"0"}

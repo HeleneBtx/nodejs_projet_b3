@@ -1,0 +1,4 @@
+{"_id":{"$oid":"5e1b3381016996186c2ae582"},"id":{"$numberInt":"1"},"text":"Project #1","start_date":"01-04-2019","duration":{"$numberInt":"18"}}
+{"_id":{"$oid":"5e1b33f4016996186c2ae583"},"id":{"$numberInt":"2"},"text":"Task #1","start_date":"02-04-2019","duration":{"$numberInt":"8"},"parent":{"$numberInt":"1"}}
+{"_id":{"$oid":"5e1b3469016996186c2ae585"},"id":{"$numberInt":"3"},"text":"Task #2","start_date":"11-04-2019","duration":{"$numberInt":"8"},"parent":{"$numberInt":"1"}}
+{"_id":{"$oid":"5e1b8ac2016996186c2ae588"},"id":{"$numberInt":"4"},"start_date":"29-03-2019","text":"Task #3","end_date":"02-04-2019","parent":{"$numberInt":"0"},"usage":[{"id":"1","value":"30"},{"id":"2","value":"20"}]}
