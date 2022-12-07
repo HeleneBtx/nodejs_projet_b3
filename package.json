@@ -18,9 +18,9 @@
   "homepage": "https://github.com/HeleneBtx/nodejs_projet_b3#readme",
   "dependencies": {
     "bluebird": "^3.7.2",
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.20.1",
     "ent": "^2.2.0",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "moment": "^2.24.0",
     "mongodb": "^3.4.1",
     "mongoose": "^5.8.7",
